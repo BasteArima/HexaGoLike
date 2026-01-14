@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3904565245017676243}
   - component: {fileID: 1691711202464982542}
   m_Layer: 9
-  m_Name: FieldCell
+  m_Name: FieldSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
