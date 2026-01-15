@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,10 +6,12 @@ using System.Collections.Generic;
 public class MergeController : MonoBehaviour
 {
     public static bool IsMerging { get; private set; }
-    private const float BASE_DURATION = 0.25f;
+    
+    public static event Action OnMergeOccurred;
     
     [SerializeField] private PackshotController _packshot;
     [SerializeField] private int _numsOfHexToMerge = 10;
+    [SerializeField] private  float _mergeBaseDuration = 0.25f;
 
     private List<FieldSlot> _updatedSlots = new List<FieldSlot>();
     private float _speedMultiplier = 1f;
@@ -50,7 +53,7 @@ public class MergeController : MonoBehaviour
         var hexagonsToAdd = GetHexagonsToAdd(topType, similarNeighborFieldSlots.ToArray());
         RemoveHexagonsFromStacks(hexagonsToAdd, similarNeighborFieldSlots.ToArray());
 
-        float currentDuration = BASE_DURATION / _speedMultiplier;
+        float currentDuration = _mergeBaseDuration / _speedMultiplier;
         MoveHexagons(fieldSlot, hexagonsToAdd, currentDuration);
 
         yield return new WaitForSeconds(currentDuration + (hexagonsToAdd.Count * 0.01f));
@@ -109,7 +112,7 @@ public class MergeController : MonoBehaviour
         if (similarHexagons.Count < _numsOfHexToMerge) yield break;
 
         float delay = 0;
-        float duration = BASE_DURATION / _speedMultiplier;
+        float duration = _mergeBaseDuration / _speedMultiplier;
 
         while (similarHexagons.Count > 0)
         {
@@ -123,6 +126,7 @@ public class MergeController : MonoBehaviour
 
         _updatedSlots.Add(fieldSlot);
         yield return new WaitForSeconds(duration + delay);
+        OnMergeOccurred?.Invoke();
     }
 
     private void MoveHexagons(FieldSlot fieldSlot, List<Hexagon> hexagonsToAdd, float duration)

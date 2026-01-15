@@ -35,8 +35,6 @@ public class FieldCreator : MonoBehaviour
 
                 var fieldSlot = Instantiate(_fieldSlotPrefab, _fieldSlotsParent);
                 fieldSlot.transform.position = spawnPos;
-                fieldSlot.Init(_colorConfig);
-                
                 _fieldSlots.Add(fieldSlot);
             }
         }

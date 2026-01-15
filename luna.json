@@ -1,7 +1,7 @@
 {
     "version": "7.0.0",
     "projectId": "9605645f69983454cb7274a3479c7942",
-    "applicationID": 36169,
+    "applicationID": 36168,
     "creativeName": "test_3d",
     "pgServer": "EU",
     "window": {
@@ -18227,11 +18227,11 @@
                 "instanceMethods": [
                     {
                         "name": "name#get",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "name#set",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "mainTexture#get",
@@ -18243,11 +18243,11 @@
                     },
                     {
                         "name": "color#get",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "color#set",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "shader#get",
@@ -18299,7 +18299,7 @@
                     },
                     {
                         "name": "$ctor1",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "$ctor2",
@@ -18311,7 +18311,7 @@
                     },
                     {
                         "name": "HasProperty$1",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "HasProperty",
@@ -18367,7 +18367,7 @@
                     },
                     {
                         "name": "GetColor$1",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "GetColor",
@@ -18375,7 +18375,7 @@
                     },
                     {
                         "name": "SetColor$1",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "SetColor",
@@ -20431,7 +20431,7 @@
                     },
                     {
                         "name": "material#get",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "material#set",
@@ -20471,7 +20471,7 @@
                     },
                     {
                         "name": "materials#get",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "materials#set",
@@ -26454,16 +26454,12 @@
                         "excluded": false
                     },
                     {
-                        "name": "Init",
-                        "excluded": true
-                    },
-                    {
                         "name": "Start",
                         "excluded": false
                     },
                     {
                         "name": "GenerateInitialHexagons",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "AssignStack",
@@ -26476,6 +26472,18 @@
                     {
                         "name": "OnDrawGizmosSelected",
                         "excluded": true
+                    },
+                    {
+                        "name": "Awake",
+                        "excluded": false
+                    },
+                    {
+                        "name": "Highlight",
+                        "excluded": false
+                    },
+                    {
+                        "name": "ResetHighlight",
+                        "excluded": false
                     }
                 ]
             },
@@ -26773,7 +26781,7 @@
                     },
                     {
                         "name": "color",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "color$1",
@@ -27267,7 +27275,7 @@
                     },
                     {
                         "name": "colorRecursive$1",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "colorRecursive",
@@ -27295,7 +27303,7 @@
                     },
                     {
                         "name": "tweenColor",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "from#get",
@@ -27447,7 +27455,7 @@
                     },
                     {
                         "name": "setColor",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "setCallbackColor",
@@ -27595,7 +27603,7 @@
                     },
                     {
                         "name": "setFromColor",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "pause",
@@ -27635,7 +27643,7 @@
                     },
                     {
                         "name": "setEaseOutQuad",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "setEaseInOutQuad",
@@ -27771,7 +27779,7 @@
                     },
                     {
                         "name": "easeOutQuad",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "easeLinear",
@@ -28083,7 +28091,7 @@
                     },
                     {
                         "name": "setPoint",
-                        "excluded": true
+                        "excluded": false
                     },
                     {
                         "name": "setDestroyOnComplete",
@@ -29394,6 +29402,32 @@
                     {
                         "name": "Has",
                         "excluded": true
+                    }
+                ]
+            },
+            {
+                "className": "StackSpawnController.PredefinedStack",
+                "staticMethods": [],
+                "instanceMethods": [
+                    {
+                        "name": "getDefaultValue",
+                        "excluded": true
+                    },
+                    {
+                        "name": "ctor",
+                        "excluded": false
+                    },
+                    {
+                        "name": "getHashCode",
+                        "excluded": true
+                    },
+                    {
+                        "name": "equals",
+                        "excluded": true
+                    },
+                    {
+                        "name": "$clone",
+                        "excluded": false
                     }
                 ]
             }

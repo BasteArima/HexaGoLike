@@ -56,6 +56,5 @@ public enum ColorType
     Green = 3,
     Pink = 4,
     Yellow = 5,
-    Black = 6,
-    Turquoise = 7
+    Black = 6
 }

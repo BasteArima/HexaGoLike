@@ -13,6 +13,7 @@ public class StackController : MonoBehaviour
 
     private HexagonStack _currentStack;
     private Vector3 _currentStackInitialPos;
+
     private FieldSlot _targetSlot;
 
     private void Update()
@@ -88,13 +89,16 @@ public class StackController : MonoBehaviour
 
     private void DraggingAboveGround(Ray ray)
     {
+        if (_targetSlot != null)
+        {
+            _targetSlot.ResetHighlight();
+            _targetSlot = null;
+        }
+
         RaycastHit hit;
         Physics.Raycast(ray, out hit, 500, _groundLayerMask);
 
-        if (hit.collider == null)
-        {
-            return;
-        }
+        if (hit.collider == null) return;
 
         var currentStackTargetPos = hit.point.With(y: 2);
 
@@ -102,8 +106,6 @@ public class StackController : MonoBehaviour
             _currentStack.transform.position,
             currentStackTargetPos,
             Time.deltaTime * 30);
-
-        _targetSlot = null;
     }
 
     private void DraggingAboveGridCell(RaycastHit hit, Ray ray)
@@ -111,25 +113,41 @@ public class StackController : MonoBehaviour
         var gridCell = hit.collider.GetComponent<FieldSlot>();
 
         if (gridCell.IsOccupied)
+        {
             DraggingAboveGround(ray);
+        }
         else
-            DraggingAboveNonOccupiedGridCell(gridCell);
+        {
+            DraggingAboveNonOccupiedGridCell(gridCell, hit);
+        }
     }
 
-    private void DraggingAboveNonOccupiedGridCell(FieldSlot fieldSlot)
+    private void DraggingAboveNonOccupiedGridCell(FieldSlot fieldSlot, RaycastHit hit)
     {
-        var currentStackTargetPos = fieldSlot.transform.position.With(y: 2);
+        var currentStackTargetPos = hit.point.With(y: 2);
 
         _currentStack.transform.position = Vector3.MoveTowards(
             _currentStack.transform.position,
             currentStackTargetPos,
             Time.deltaTime * 30);
 
-        _targetSlot = fieldSlot;
+        if (_targetSlot != fieldSlot)
+        {
+            if (_targetSlot != null)
+                _targetSlot.ResetHighlight();
+
+            _targetSlot = fieldSlot;
+            _targetSlot.Highlight();
+        }
     }
 
     private void HandleInputUp()
     {
+        if (_targetSlot != null)
+        {
+            _targetSlot.ResetHighlight();
+        }
+
         if (_targetSlot == null)
         {
             _currentStack.transform.position = _currentStackInitialPos;
