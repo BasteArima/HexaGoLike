@@ -6,7 +6,8 @@ public class MergeController : MonoBehaviour
 {
     public static bool IsMerging { get; private set; }
     private const float BASE_DURATION = 0.25f;
-
+    
+    [SerializeField] private PackshotController _packshot;
     [SerializeField] private int _numsOfHexToMerge = 10;
 
     private List<FieldSlot> _updatedSlots = new List<FieldSlot>();
@@ -57,7 +58,11 @@ public class MergeController : MonoBehaviour
         yield return CheckForCompleteStack(fieldSlot, topType);
 
         _speedMultiplier *= 1.3f;
-        AreMovesAvailable();
+        if (!AreMovesAvailable()) 
+        {
+            Debug.Log("Game Over");
+            _packshot.Show();
+        }
     }
 
     private List<FieldSlot> GetSimilarNeighborFieldSlots(ColorType targetType, FieldSlot[] neighborFieldSlots)

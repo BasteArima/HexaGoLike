@@ -31,6 +31,6 @@ public class HexagonStack : MonoBehaviour
     public ColorType GetTopHexagonType()
     {
         if (Hexagons == null || Hexagons.Count == 0) return ColorType.White;
-        return Hexagons[^1].Type;
+        return Hexagons[Hexagons.Count - 1].Type; 
     }
 }

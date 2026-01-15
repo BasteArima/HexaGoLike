@@ -102,3 +102,6 @@ InitTestScene*.unity*
 *.userproperties
 Assets/StreamingAssets/build_info
 Assets/StreamingAssets/build_info.meta
+
+
+/[Ll]unaTemp/

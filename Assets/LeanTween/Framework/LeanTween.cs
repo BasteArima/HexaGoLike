@@ -3537,6 +3537,7 @@ public class LTSpline {
     }*/
 
     public void drawLinesGLLines(Material outlineMaterial, Color color, float width){
+#if UNITY_EDITOR
         GL.PushMatrix();
         outlineMaterial.SetPass(0);
         GL.LoadPixelMatrix();
@@ -3583,7 +3584,7 @@ public class LTSpline {
 
         GL.End();
         GL.PopMatrix();
-
+    #endif
     }
 
     public Vector3[] generateVectors(){
