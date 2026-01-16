@@ -13,26 +13,32 @@ public class FieldSlot : MonoBehaviour
     [SerializeField] private float _highlightScaleY;
     [SerializeField] private float _highlightDuration;
     [SerializeField] private Hexagon _hexagonPrefab;
+
     [SerializeField, OnValueChanged("GenerateInitialHexagons")]
     private ColorType[] _initialStack;
 
     public List<FieldSlot> Neighbors { get; set; } = new List<FieldSlot>();
 
     public HexagonStack Stack { get; private set; }
-    public bool IsOccupied => Stack != null;
+    public bool IsOccupied => Stack != null && Stack.Hexagons != null && Stack.Hexagons.Count > 0;
 
     private Color _originalColor;
     private Vector3 _originalScale;
     private bool _isHighlighted;
 
+    private MaterialPropertyBlock _propBlock;
+    private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
+
     private void Awake()
     {
-        _originalColor = _renderer.material.color;
+        _propBlock = new MaterialPropertyBlock();
         _originalScale = transform.localScale;
+        _originalColor = _renderer.sharedMaterial.HasProperty(BaseColorId) ? _renderer.sharedMaterial.GetColor(BaseColorId) : _renderer.sharedMaterial.color;
     }
 
     private void Start()
     {
+        gameObject.name = $"Slot_{transform.GetSiblingIndex()}";
         BakeNeighbors();
         if (_initialStack.Length > 0)
             GenerateInitialHexagons();
@@ -44,7 +50,9 @@ public class FieldSlot : MonoBehaviour
         _isHighlighted = true;
 
         LeanTween.cancel(gameObject);
-        LeanTween.color(_renderer.gameObject, _highlightColor, _highlightDuration)
+        LeanTween.cancel(_renderer.gameObject);
+
+        LeanTween.value(gameObject, ApplyColor, _originalColor, _highlightColor, _highlightDuration)
             .setEase(LeanTweenType.easeOutQuad);
 
         Vector3 targetScale = _originalScale;
@@ -60,13 +68,22 @@ public class FieldSlot : MonoBehaviour
         _isHighlighted = false;
 
         LeanTween.cancel(gameObject);
+        LeanTween.cancel(_renderer.gameObject);
 
-
-        LeanTween.color(_renderer.gameObject, _originalColor, _highlightDuration)
+        LeanTween.value(gameObject, ApplyColor, _highlightColor, _originalColor, _highlightDuration)
             .setEase(LeanTweenType.easeOutQuad);
 
         LeanTween.scale(_renderer.gameObject, _originalScale, _highlightDuration)
             .setEase(LeanTweenType.easeOutQuad);
+    }
+
+    private void ApplyColor(Color color)
+    {
+        if (_renderer == null) return;
+
+        _renderer.GetPropertyBlock(_propBlock);
+        _propBlock.SetColor(BaseColorId, color);
+        _renderer.SetPropertyBlock(_propBlock);
     }
 
     private void GenerateInitialHexagons()
@@ -98,6 +115,8 @@ public class FieldSlot : MonoBehaviour
 
     public void AssignStack(HexagonStack stack) => Stack = stack;
 
+    public void ClearStackReference() => Stack = null;
+
     public void BakeNeighbors()
     {
         Neighbors.Clear();
@@ -120,7 +139,7 @@ public class FieldSlot : MonoBehaviour
                 Gizmos.DrawLine(transform.position, neighbor.transform.position);
     }
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
     [SerializeField] private ColorType _fastColorType;
     [Button]
     private void FastSetColor()
@@ -129,5 +148,5 @@ public class FieldSlot : MonoBehaviour
             _initialStack[index] = _fastColorType;
         GenerateInitialHexagons();
     }
-    #endif
+#endif
 }

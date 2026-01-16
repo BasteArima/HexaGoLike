@@ -1,12 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Luna.Unity;
+using TMPro;
 
 public class PackshotController : MonoBehaviour
 {
     [SerializeField] private CanvasGroup _canvasGroup;
     [SerializeField] private Button _playNowButton;
     [SerializeField] private Button _fullscreenButton;
+
+    [SerializeField] private TMP_Text _titleText;
 
     private bool _isShown;
 
@@ -21,10 +24,11 @@ public class PackshotController : MonoBehaviour
         _fullscreenButton.onClick.AddListener(OnInstallClicked);
     }
 
-    public void Show()
+    public void Show(bool isWin)
     {
         if (_isShown) return;
         _isShown = true;
+        _titleText.text = isWin ? "LEVEL COMPLETE!" : "GAME OVER";
 
         _canvasGroup.gameObject.SetActive(true);
         _canvasGroup.blocksRaycasts = true;
@@ -34,7 +38,7 @@ public class PackshotController : MonoBehaviour
             .setEase(LeanTweenType.easeInOutQuad);
 
         LifeCycle.GameEnded();
-        Debug.Log("Luna: Game Ended");
+        Debug.Log($"Luna: Game Ended. Result: {(isWin ? "Win" : "Lose")}");
     }
 
     private void OnInstallClicked()

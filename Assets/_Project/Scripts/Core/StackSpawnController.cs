@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 using NaughtyAttributes;
 using Random = UnityEngine.Random;
 
@@ -9,26 +10,23 @@ public class StackSpawnController : MonoBehaviour
     public static StackSpawnController Instance { get; private set; }
     public static event Action OnStacksGenerated;
 
-    [Serializable]
-    public struct PredefinedStack
-    {
-        public List<ColorType> HexagonTypes;
-    }
-
-    [Header("Scripted Scenarios")]
-    [SerializeField] private List<PredefinedStack> _scriptedStacks;
-
-    [Header("Random Configs")]
+    [Header("Settings")]
+    [SerializeField] private int _maxWaves = 0;
+    [SerializeField] private PredefinedStackConfig _scriptedStacks;
     [SerializeField] private ColorsConfig _colorsConfig;
     [SerializeField, MinMaxSlider(2, 8)] private Vector2Int _minMaxHexCount;
-    
-    [Header("References")]
-    [SerializeField] private Transform _stackPositionsParent;
+
+    [Header("References")] [SerializeField]
+    private Transform _stackPositionsParent;
+
     [SerializeField] private Hexagon _hexagonPrefab;
     [SerializeField] private HexagonStack _hexagonStackPrefab;
 
     private int _stackCounter;
     private int _globalSpawnIndex;
+    private int _currentWaveCount;
+
+    public bool HasWavesLeft => _maxWaves <= 0 || _currentWaveCount < _maxWaves;
 
     public List<HexagonStack> ActiveStacks
     {
@@ -40,10 +38,11 @@ public class StackSpawnController : MonoBehaviour
                 var stack = child.GetComponentInChildren<HexagonStack>();
                 if (stack != null) stacks.Add(stack);
             }
+
             return stacks;
         }
     }
-    
+
     private void Awake()
     {
         Instance = this;
@@ -63,7 +62,15 @@ public class StackSpawnController : MonoBehaviour
         if (_stackCounter >= 3)
         {
             _stackCounter = 0;
-            GenerateStacks();
+
+            if (HasWavesLeft)
+            {
+                GenerateStacks();
+            }
+            else
+            {
+                Debug.Log("No more waves left. Waiting for game end.");
+            }
         }
     }
 
@@ -74,9 +81,11 @@ public class StackSpawnController : MonoBehaviour
 
     private void GenerateStacks()
     {
+        _currentWaveCount++;
+
         for (int i = 0; i < _stackPositionsParent.childCount; i++)
             GenerateStack(_stackPositionsParent.GetChild(i));
-        
+
         OnStacksGenerated?.Invoke();
     }
 
@@ -87,9 +96,9 @@ public class StackSpawnController : MonoBehaviour
 
         var typesForThisStack = new List<ColorType>();
 
-        if (_globalSpawnIndex < _scriptedStacks.Count)
+        if (_globalSpawnIndex < _scriptedStacks.HexagonTypes.Count)
         {
-            typesForThisStack.AddRange(_scriptedStacks[_globalSpawnIndex].HexagonTypes);
+            typesForThisStack.AddRange(_scriptedStacks.HexagonTypes[_globalSpawnIndex].HexagonTypes);
         }
         else
         {
@@ -109,13 +118,13 @@ public class StackSpawnController : MonoBehaviour
         for (int i = 0; i < typesForThisStack.Count; i++)
         {
             var currentType = typesForThisStack[i];
-            
+
             var hexagonLocalPos = Vector3.up * i * .2f;
             var spawnPosition = hexStack.transform.TransformPoint(hexagonLocalPos);
 
             var hexagonInstance =
                 Instantiate(_hexagonPrefab, spawnPosition, Quaternion.identity, hexStack.transform);
-            
+
             var visualColor = _colorsConfig.GetColor(currentType);
 
             hexagonInstance.Init(currentType, visualColor);

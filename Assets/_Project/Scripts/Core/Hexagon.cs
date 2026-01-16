@@ -15,10 +15,10 @@ public class Hexagon : MonoBehaviour
     public void Init(ColorType type, Color visualColor)
     {
         Type = type;
-        SetVisualColor(visualColor); 
+        SetVisualColor(visualColor);
     }
-    
-    public void Configure( HexagonStack hexagonStack) => HexagonStack = hexagonStack;
+
+    public void Configure(HexagonStack hexagonStack) => HexagonStack = hexagonStack;
     public void SetParent(Transform parent) => transform.SetParent(parent);
     public void DisableCollider() => _collider.enabled = false;
 

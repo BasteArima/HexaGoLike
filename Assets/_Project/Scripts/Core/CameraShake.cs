@@ -44,7 +44,7 @@ public class CameraShake : MonoBehaviour
         while (_currentShakeTimer > 0)
         {
             var randomPoint = Random.insideUnitSphere * _shakeMagnitude;
-            randomPoint.z = 0; 
+            randomPoint.z = 0;
 
             transform.localPosition = _initialPosition + randomPoint;
             _currentShakeTimer -= Time.deltaTime * _dampingSpeed;
